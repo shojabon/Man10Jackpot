@@ -1,10 +1,10 @@
 name: Man10Jackpot
-version: ${project.version}
+version: '${project.version}'
 main: red.man10.man10jackpot.Man10Jackpot
 authors: [Sho0]
 description: Man10Jackpot plugin
 website: man10.red
-depend: [Essentials, Man10VaultAPIPlus]
+api-version: 1.17
 commands:
  mjackpot:
  mj:

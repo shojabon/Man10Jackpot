@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="McUtils">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../McUtils/out/artifacts/McUtils_jar/McUtils.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
