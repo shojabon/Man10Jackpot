@@ -1,5 +1,8 @@
 package red.man10.man10jackpot;
 
+import ToolMenu.NumericInputMenu;
+import com.shojabon.mcutils.Utils.BaseUtils;
+import com.shojabon.mcutils.Utils.SInventory.SInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -59,7 +62,36 @@ public class Man10JackpotListener implements Listener {
             }
             if(e.getSlot() == 49){
                 plugin.playerMenuState.remove(p);
-                plugin.menu.betMenuInv(p);
+
+                NumericInputMenu menu = new NumericInputMenu("金額を入力してください", plugin);
+                menu.setOnConfirm(number -> {
+                    if(number < plugin.getConfig().getInt("minimum_bet")){
+                        p.sendMessage(plugin.prefix + "最低ベットは" + BaseUtils.priceString(plugin.getConfig().getInt("minimum_bet")) + "円からです");
+                        return;
+                    }
+                    if(plugin.vault.getBalance(p.getUniqueId()) < (Double.valueOf(number) * (double) plugin.ticket_price)){
+                        p.sendMessage(plugin.prefix + "十分な所持金を持っていません");
+                        return;
+                    }
+                    if(plugin.playersInGame.size() > plugin.icons.size()){
+                        p.sendMessage(plugin.prefix + "満員です");
+                        return;
+                    }
+                    new Thread(() -> plugin.mysql.execute("insert into jackpot_bet values ('0','" + plugin.gameID + "','" + p.getUniqueId() + "','" + p.getName() + "','" + number + "','" + plugin.ticket_price + "',NOW());")).start();
+                    plugin.placeBet(p, Double.valueOf(number));
+                });
+                menu.setOnCancel(ee -> {
+                    Bukkit.getScheduler().runTask(plugin, ()-> {
+                        plugin.openMainMenuForPlayer(p);
+                    });
+                });
+
+                menu.setOnClose(ee -> {
+                    Bukkit.getScheduler().runTask(plugin, ()-> {
+                        plugin.openMainMenuForPlayer(p);
+                    });
+                });
+                menu.open(p);
                 plugin.playerMenuState.put(p,"bet");
             }
             if (e.getSlot() == 48) {
@@ -78,150 +110,6 @@ public class Man10JackpotListener implements Listener {
                 return;
             }
             return;
-        }
-        if(plugin.playerMenuState.get(p).equalsIgnoreCase("bet")){
-            e.setCancelled(true);
-            Inventory inv = e.getInventory();
-            String val = "";
-            if(e.getCurrentItem() == null){
-
-                return;
-            }
-            if(e.getInventory() == null){
-
-                return;
-            }
-            if(e.getSlot() == -999){
-                return;
-            }
-            if(e.getCurrentItem().getType() == Material.AIR){
-
-                return;
-            }
-            if(e.getCurrentItem().getItemMeta().getDisplayName().contains("BET")){
-
-                return;
-            }
-            if(e.getSlot() == 52 ){
-                e.getWhoClicked().closeInventory();
-
-                return;
-            }
-            if(e.getSlot() == 48){
-                for (int i = 0; i < 9; i++){
-                    inv.setItem(i, new ItemStack(Material.AIR));
-                }
-                plugin.playerCalcValue.put(p,null);
-                ItemMeta itemMeta = inv.getItem(50).getItemMeta();
-                itemMeta.setLore(null);
-                inv.getItem(50).setItemMeta(itemMeta);
-
-                return;
-            }
-            if(plugin.playerCalcValue.get(p) == null){
-                plugin.playerCalcValue.put(p,"");
-            }
-            if(e.getSlot() == 50){
-                //bet button
-                if(plugin.playerCalcValue.get(p) == null || plugin.playerCalcValue.get(p).equalsIgnoreCase("")){
-                    p.sendMessage(plugin.prefix + "購入は1口以上からです");
-                    e.setCancelled(true);
-                    return;
-                }
-                if(plugin.vault.getBalance(p.getUniqueId()) < (Double.valueOf(plugin.playerCalcValue.get(p)) * Double.valueOf(plugin.ticket_price))){
-                    p.sendMessage(plugin.prefix + "十分な所持金を持っていません");
-                    e.setCancelled(true);
-                    return;
-                }
-                if(plugin.playersInGame.size() > plugin.icons.size()){
-                    p.sendMessage(plugin.prefix + "満員です");
-                    return;
-                }
-                //bet
-                //bet
-                //bet
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        plugin.mysql.execute("insert into jackpot_bet values ('0','" + plugin.gameID + "','" + p.getUniqueId() + "','" + p.getName() + "','" + plugin.playerCalcValue.get(p) + "','" + plugin.ticket_price + "'," + plugin.currentTime() + ");");
-                    }
-                }).start();
-                plugin.placeBet(p, Double.parseDouble(plugin.playerCalcValue.get(p)));
-                e.setCancelled(true);
-                return;
-            }
-            if(e.getInventory().getItem(0) != null){
-                p.sendMessage(plugin.prefix + "掛け金の上限です");
-                e.setCancelled(true);
-                return;
-            }
-            if(e.getSlot() == 19){
-                moveD(inv);
-                inv.setItem(8,inv.getItem(19));
-
-                val = "7";
-            }
-            if(e.getSlot() == 20){
-                moveD(inv);
-                inv.setItem(8,inv.getItem(20));
-
-                val = "8";
-            }
-            if(e.getSlot() == 21){
-                moveD(inv);
-                inv.setItem(8,inv.getItem(21));
-
-                val = "9";
-            }
-            if(e.getSlot() == 28){
-                moveD(inv);
-                inv.setItem(8,inv.getItem(28));
-
-                val = "4";
-            }
-            if(e.getSlot() == 29){
-                moveD(inv);
-                inv.setItem(8,inv.getItem(29));
-
-                val = "5";
-            }
-            if(e.getSlot() == 30){
-                moveD(inv);
-                inv.setItem(8,inv.getItem(30));
-
-                val = "6";
-            }
-            if(e.getSlot() == 37){
-                moveD(inv);
-                inv.setItem(8,inv.getItem(37));
-
-                val = "1";
-            }
-            if(e.getSlot() == 38){
-                moveD(inv);
-                inv.setItem(8,inv.getItem(38));
-
-                val = "2";
-            }
-            if(e.getSlot() == 39){
-                moveD(inv);
-                inv.setItem(8,inv.getItem(39));
-
-                val = "3";
-            }
-            if(e.getSlot() == 46){
-                if(inv.getItem(8) == null){
-                    e.setCancelled(true);
-                    return;
-                }
-                moveD(inv);
-                inv.setItem(8,inv.getItem(46));
-
-                val = "0";
-            }
-            plugin.playerCalcValue.put(p,plugin.playerCalcValue.get(p) + val);
-            changeConfirmPrice(e.getInventory(),p);
-            e.setCancelled(true);
         }
     }
 

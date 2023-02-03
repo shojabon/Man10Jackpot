@@ -1,5 +1,6 @@
 package red.man10.man10jackpot;
 
+import com.shojabon.mcutils.Utils.BaseUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -20,8 +21,7 @@ public class Man10JackpotGame {
     }
 
     public Inventory setUpMainInv(Player p){
-        String num = String.valueOf(plugin.totalBet);
-        Inventory inv = Bukkit.createInventory(null,54,"§c§l現在ベット:$" +num);
+        Inventory inv = Bukkit.createInventory(null,54,"§c§l現在ベット:$" + BaseUtils.priceString(plugin.totalBet));
         ItemStack greyGlass = new ItemStack(Material.GRAY_STAINED_GLASS_PANE,1);
         ItemMeta greyMeta = greyGlass.getItemMeta();
         greyMeta.setDisplayName(" ");
@@ -42,11 +42,11 @@ public class Man10JackpotGame {
         clock.setItemMeta(clockMeta);
         inv.setItem(47,clock);
 
-        ItemStack info = new ItemStack(Material.PAPER);
-        ItemMeta infoMeta = info.getItemMeta();
-        infoMeta.setDisplayName("§d§lゲーム情報");
-        info.setItemMeta(infoMeta);
-        inv.setItem(51,info);
+//        ItemStack info = new ItemStack(Material.PAPER);
+//        ItemMeta infoMeta = info.getItemMeta();
+//        infoMeta.setDisplayName("§d§lゲーム情報");
+//        info.setItemMeta(infoMeta);
+//        inv.setItem(51,info);
 
         ItemStack leave = new ItemStack(Material.RED_STAINED_GLASS_PANE,1);
         ItemMeta leaveMeta = leave.getItemMeta();

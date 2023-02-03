@@ -1,5 +1,6 @@
 package red.man10.man10jackpot;
 
+import com.shojabon.mcutils.Utils.BaseUtils;
 import com.shojabon.mcutils.Utils.MySQL.MySQLAPI;
 import com.shojabon.mcutils.Utils.VaultAPI;
 import org.bukkit.Bukkit;
@@ -153,7 +154,7 @@ public final class Man10Jackpot extends JavaPlugin {
             ItemMeta itemMetat = itemt.getItemMeta();
             itemMetat.setDisplayName("§e§l" + p.getName());
             int intValueOfAmount = ((int)amount  + (int) getBet.amount);
-            String[] lore = {"§c§l====================","§d§l掛け金" + (amount + getBet.amount) * ticket_price,"§d§l" + intValueOfAmount + "口購入","§c§l====================","§b§l勝率"};
+            String[] lore = {"§c§l====================","§d§l掛け金" + BaseUtils.priceString((int) (amount * ticket_price)) + "円", "§d§l" + intValueOfAmount + "口購入","§c§l====================","§b§l勝率"};
             itemMetat.setLore(Arrays.asList(lore));
             itemt.setItemMeta(itemMetat);
             idToItem.put(UUIDToId.get(p.getUniqueId()),itemt);
@@ -189,7 +190,7 @@ public final class Man10Jackpot extends JavaPlugin {
         ItemMeta itemMeta = item.getItemMeta();
         itemMeta.setDisplayName("§e§l" + p.getName());
         int intValueOfamount = (int)amount;
-        String[] lore = {"§c§l====================","§d§l掛け金" + amount * ticket_price,"§d§l" + intValueOfamount + "口購入","§c§l====================","§b§l勝率"};
+        String[] lore = {"§c§l====================","§d§l掛け金" + BaseUtils.priceString((int) (amount * ticket_price)) + "円", "§d§l" + intValueOfamount + "口購入","§c§l====================","§b§l勝率"};
         itemMeta.setLore(Arrays.asList(lore));
         item.setItemMeta(itemMeta);
         idToItem.put(amountOfPlayer + 1,item);
@@ -261,7 +262,7 @@ public final class Man10Jackpot extends JavaPlugin {
             ItemMeta itemMeta = item.getItemMeta();
             itemMeta.setDisplayName("§e§l" + p.getName());
             double winRate = (info.amount/totalBetInt)*100;
-            String[] lore = {"§c§l====================","§d§l掛け金" + info.amount * ticket_price,"§d§l" + ((int) info.amount) + "口購入","§c§l====================","§b§l勝率" + round(winRate,2) + "%"};
+            String[] lore = {"§c§l====================","§d§l掛け金" + BaseUtils.priceString((int) (info.amount * ticket_price))  + "円", "§d§l" + ((int) info.amount) + "口購入","§c§l====================","§b§l勝率" + round(winRate,2) + "%"};
             itemMeta.setLore(Arrays.asList(lore));
             item.setItemMeta(itemMeta);
             idToItem.put(UUIDToId.get(p.getUniqueId()),item);
