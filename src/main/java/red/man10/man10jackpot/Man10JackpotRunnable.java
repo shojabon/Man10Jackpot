@@ -34,7 +34,7 @@ public class Man10JackpotRunnable {
                 if(plugin.time == 0){
                     cancel();
                     plugin.inGame = true;
-                    plugin.gameMenu = Bukkit.createInventory(null,54,"§5§kA§c§l優勝賞金:$" + Double.valueOf(plugin.totalBet) + "§5§kA");
+                    plugin.gameMenu = Bukkit.createInventory(null,54,"§5§kA§c§l優勝賞金:$" + BaseUtils.priceString(plugin.totalBet) + "§5§kA");
                     plugin.menu.setUpGameMenu();
                     plugin.openSpinMenuForPlayer();
                     return;
