@@ -1,5 +1,6 @@
 package red.man10.man10jackpot;
 
+import com.shojabon.mcutils.Utils.BaseUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -107,9 +108,9 @@ public class Man10JackpotRunnable {
                         for(Player p : Bukkit.getOnlinePlayers()){
                             if(!p.getUniqueId().toString().equalsIgnoreCase(bet.uuid.toString())){
                                 //p.sendMessage(plugin.prefix + bet.name + "さんが" + plugin.round(winRate,2) + "%の確立で" + Double.valueOf(plugin.totalBet) + "円を勝ち取りました");
-                                p.sendMessage(plugin.loser_broadcast.replaceAll("&","§").replaceAll("%AMOUNT%", String.valueOf(Double.valueOf(plugin.totalBet))).replaceAll("%TAXED%", String.valueOf(payout)).replaceAll("%WINNER%", bet.name).replaceAll("%PERCENTAGE%", String.valueOf(plugin.round(winRate,2))));
+                                p.sendMessage(plugin.loser_broadcast.replaceAll("&","§").replaceAll("%AMOUNT%", BaseUtils.priceString(plugin.totalBet)).replaceAll("%TAXED%", String.valueOf(payout)).replaceAll("%WINNER%", bet.name).replaceAll("%PERCENTAGE%", String.valueOf(plugin.round(winRate,2))));
                             }else{
-                                p.sendMessage(plugin.winner_broadcast.replaceAll("&","§").replaceAll("%AMOUNT%", String.valueOf(Double.valueOf(plugin.totalBet))).replaceAll("%TAXED%", String.valueOf(payout)).replaceAll("%WINNER%", bet.name).replaceAll("%PERCENTAGE%", String.valueOf(plugin.round(winRate,2))));
+                                p.sendMessage(plugin.winner_broadcast.replaceAll("&","§").replaceAll("%AMOUNT%", BaseUtils.priceString(plugin.totalBet)).replaceAll("%TAXED%", String.valueOf(payout)).replaceAll("%WINNER%", bet.name).replaceAll("%PERCENTAGE%", String.valueOf(plugin.round(winRate,2))));
                             }
                         }
                         plugin.vault.deposit(plugin.idToUUID.get(record[0]),payout);
