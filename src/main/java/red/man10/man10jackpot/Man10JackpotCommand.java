@@ -26,7 +26,7 @@ public class Man10JackpotCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         Player p = (Player) sender;
         if (plugin.inGame == true) {
-            plugin.playersInMenu.add(p);
+            plugin.playersInMenu.add(p.getUniqueId());
             plugin.someOneInMenu = true;
             p.openInventory(plugin.gameMenu);
             return true;
@@ -47,7 +47,8 @@ public class Man10JackpotCommand implements CommandExecutor {
                     return false;
                 }
                 for(int i = 0; i < plugin.playersInMenu.size(); i++){
-                    Player pp = plugin.playersInMenu.get(i);
+                    Player pp = Bukkit.getPlayer(plugin.playersInMenu.get(i));
+                    if(pp == null) continue;
                     pp.closeInventory();
                 }
                 p.sendMessage(plugin.prefix + "ゲームがキャンセルされました");
@@ -92,7 +93,7 @@ public class Man10JackpotCommand implements CommandExecutor {
                 p.sendMessage("§b/mj reload リロードコマンド");
                 p.sendMessage("§b/mj forcestart ゲームを強制開始");
                 p.sendMessage("§b/mj addtime <数字> 時間を追加する");
-                p.sendMessage("§d Man10 Jackpot V1.5");
+                p.sendMessage("§d Man10 Jackpot V1.6");
                 p.sendMessage("§e§l=-------------------------------=");
                 p.sendMessage("§d§lCreated By Sho0");
                 return true;
@@ -119,7 +120,7 @@ public class Man10JackpotCommand implements CommandExecutor {
             p.sendMessage(plugin.prefix + "現在ゲームはロックダウンされてます");
             return true;
         }
-        plugin.playersInMenu.add(p);
+        plugin.playersInMenu.add(p.getUniqueId());
         plugin.someOneInMenu = true;
         plugin.playerMenuPage.put(p, 1);
         plugin.playerMenuState.put(p, "main");

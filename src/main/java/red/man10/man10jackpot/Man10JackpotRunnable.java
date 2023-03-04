@@ -16,6 +16,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.UUID;
 
 /**
  * Created by sho-pc on 2017/04/22.
@@ -44,9 +45,12 @@ public class Man10JackpotRunnable {
                         return;
                     }
                     for (int i = 0; i < plugin.playersInMenu.size(); i++) {
-                        if (plugin.playerMenuState.get(plugin.playersInMenu.get(i)).equalsIgnoreCase("main")) {
+                        Player pp = Bukkit.getPlayer(plugin.playersInMenu.get(i));
+                        if(pp == null) continue;
+                        if (plugin.playerMenuState.get(pp).equalsIgnoreCase("main")) {
                             try {
-                                Player p = plugin.playersInMenu.get(i);
+                                Player p = Bukkit.getPlayer(plugin.playersInMenu.get(i));
+                                if(p == null) continue;
                                 ItemStack item = new ItemStack(Material.CLOCK);
                                 ItemMeta itemMeta = item.getItemMeta();
                                 itemMeta.setDisplayName("§d§l残り時間");
@@ -81,7 +85,8 @@ public class Man10JackpotRunnable {
                 if(require < count) {
                     require++;
                     for(int i = 0; i < plugin.playersInMenu.size(); i++){
-                        Player p = plugin.playersInMenu.get(i);
+                        Player p = Bukkit.getPlayer(plugin.playersInMenu.get(i));
+                        if(p == null) continue;
                         p.playSound(p.getLocation(), Sound.BLOCK_DISPENSER_DISPENSE,1,1);
                     }
                     count = 0;
@@ -125,11 +130,16 @@ public class Man10JackpotRunnable {
                                     p.closeInventory();
                                 }
                             }
-                            for(int i = 0; i < plugin.playersInGame.size(); i++){
-                                Player p = Bukkit.getPlayer(plugin.playersInGame.get(i));
+                            for(UUID playerInMenuUUID : plugin.playersInGame){
+                                Player p = Bukkit.getPlayer(playerInMenuUUID);
                                 if(p != null){
                                     p.closeInventory();
                                 }
+                            }
+                            for(UUID playerInMenuUUID : new ArrayList<>(plugin.playersInMenu)){
+                                Player p = Bukkit.getPlayer(playerInMenuUUID);
+                                if(p == null) continue;
+                                p.closeInventory();
                             }
                             plugin.refreshGame(true);
                         },60);

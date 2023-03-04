@@ -33,17 +33,18 @@ public class Man10JackpotListener implements Listener {
         if(plugin.someOneInMenu == false){
             return;
         }
-        if (!plugin.playersInMenu.contains(p)) {
+        if (!plugin.playersInMenu.contains(p.getUniqueId())) {
             return;
         }
+        e.setCancelled(true);
         if(plugin.inGame == true){
-            e.setCancelled(true);
+            return;
         }
         if(plugin.playerMenuState.get(p).equalsIgnoreCase("main")){
             e.setCancelled(true);
             if (e.getSlot() == 53) {
                 p.closeInventory();
-                plugin.playersInMenu.remove(p);
+                plugin.playersInMenu.remove(p.getUniqueId());
                 if (plugin.playersInMenu.isEmpty()) {
                     plugin.someOneInMenu = false;
                 }
@@ -134,14 +135,14 @@ public class Man10JackpotListener implements Listener {
             return;
         }
         Player p = (Player) e.getPlayer();
-        if(!plugin.playersInMenu.contains(p)){
+        if(!plugin.playersInMenu.contains(p.getUniqueId())){
             return;
         }
         if(!plugin.playerMenuState.containsKey(p)){
             return;
         }
         plugin.playerCalcValue.remove(p);
-        plugin.playersInMenu.remove(p);
+        plugin.playersInMenu.remove(p.getUniqueId());
         plugin.playerMenuPage.remove(p);
         if(plugin.playersInMenu.isEmpty()){
             plugin.someOneInMenu = false;

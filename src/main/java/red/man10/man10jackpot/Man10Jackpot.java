@@ -39,7 +39,7 @@ public final class Man10Jackpot extends JavaPlugin {
     public Man10JackpotIcons icon = new Man10JackpotIcons(this);
     public MySQLAPI mysql = null;
 
-    public List<Player> playersInMenu = new ArrayList<>();
+    public List<UUID> playersInMenu = new ArrayList<>();
     public List<UUID> playersInGame = new ArrayList<>();
     public List<Integer> chanceInGame = new ArrayList<>();
     public List<UUID> playerUUIDInGame = new ArrayList<>();
@@ -107,7 +107,8 @@ public final class Man10Jackpot extends JavaPlugin {
             p.closeInventory();
         }
         for(int i = 0; i < playersInMenu.size(); i++){
-            Player p = playersInMenu.get(i);
+            Player p = Bukkit.getPlayer(playersInMenu.get(i));
+            if(p == null) continue;
             p.closeInventory();
         }
         cancelGame(false);
@@ -173,6 +174,7 @@ public final class Man10Jackpot extends JavaPlugin {
             UUIDToBetInfo.put(p.getUniqueId(),getBet);
             totalBet += ticket_price * amount;
             p.sendMessage(prefix + "ベットしました");
+            Bukkit.broadcastMessage(prefix + p.getName() + "さんがジャックポットで" + BaseUtils.priceString((int) (ticket_price * amount)) + "円をベットしました！ /mjで参加!");
 
             refreshPercentage();
             refreshMenu();
@@ -216,6 +218,7 @@ public final class Man10Jackpot extends JavaPlugin {
         openMainMenuForPlayer(p);
         totalBet += ticket_price * amount;
         p.sendMessage(prefix + "ベットしました");
+        Bukkit.broadcastMessage(prefix + p.getName() + "さんがジャックポットで" + BaseUtils.priceString((int) (ticket_price * amount)) + "円をベットしました！ /mjで参加!");
         return;
     }
     public void startTimer(int amount){
@@ -229,7 +232,7 @@ public final class Man10Jackpot extends JavaPlugin {
     public void openMainMenuForPlayer(Player p){
         p.closeInventory();
         p.closeInventory();
-        playersInMenu.add(p);
+        playersInMenu.add(p.getUniqueId());
         someOneInMenu = true;
         playerMenuPage.put(p, 1);
         playerMenuState.put(p, "main");
@@ -241,10 +244,11 @@ public final class Man10Jackpot extends JavaPlugin {
             return;
         }
         for(int i = 0; i < playersInMenu.size(); i++){
-            Player p = playersInMenu.get(i);
+            Player p = Bukkit.getPlayer(playersInMenu.get(i));
+            if(p == null) continue;
             if(p.getOpenInventory().getTitle().contains("§c§l現在ベット")) {
                 p.closeInventory();
-                playersInMenu.add(p);
+                playersInMenu.add(p.getUniqueId());
                 someOneInMenu = true;
                 playerMenuPage.put(p, 1);
                 playerMenuState.put(p, "main");
@@ -279,10 +283,11 @@ public final class Man10Jackpot extends JavaPlugin {
     public void openSpinMenuForPlayer(){
         if(playersInMenu.size() != 0) {
             for (int i = 0; i < playersInMenu.size(); i++) {
-                Player p = playersInMenu.get(i);
+                Player p = Bukkit.getPlayer(playersInMenu.get(i));
+                if(p == null) continue;
                 p.closeInventory();
                 p.openInventory(gameMenu);
-                playersInMenu.add(p);
+                playersInMenu.add(p.getUniqueId());
             }
         }
         for(int i = 0; i < playersInGame.size(); i++){
@@ -290,7 +295,7 @@ public final class Man10Jackpot extends JavaPlugin {
             if(p != null) {
                 p.closeInventory();
                 p.openInventory(gameMenu);
-                playersInMenu.add(p);
+                playersInMenu.add(p.getUniqueId());
             }
         }
         someOneInMenu = true;
@@ -343,7 +348,8 @@ public final class Man10Jackpot extends JavaPlugin {
             }
         }
         for(int i = 0; i < playersInMenu.size(); i++){
-            Player p = playersInMenu.get(i);
+            Player p = Bukkit.getPlayer(playersInMenu.get(i));
+            if(p == null) continue;
             p.closeInventory();
         }
         refreshGame(createNew);

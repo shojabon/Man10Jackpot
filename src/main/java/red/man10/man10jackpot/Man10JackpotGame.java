@@ -29,10 +29,10 @@ public class Man10JackpotGame {
         for(int i = 36; i < 45; i++){
             inv.setItem(i,greyGlass);
         }
-        ItemStack buyTickets = new ItemStack(Material.EMERALD);
+        ItemStack buyTickets = new ItemStack(Material.PAPER);
         ItemMeta buyTicketsMeta = buyTickets.getItemMeta();
         buyTicketsMeta.setDisplayName("§a§lベット");
-        buyTicketsMeta.addEnchant(Enchantment.FIRE_ASPECT,1,true);
+        buyTicketsMeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL,1,true);
         buyTickets.setItemMeta(buyTicketsMeta);
         inv.setItem(49,buyTickets);
 
